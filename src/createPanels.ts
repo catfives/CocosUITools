@@ -1,0 +1,1 @@
+chrome.devtools.panels.create('CocosUITools', 'assets/icon.png', 'index.html', _panel => { console.log(_panel) });
