@@ -1,0 +1,164 @@
+@outside-color: red;
+@color: red;
+@width: 6px;
+@not-select-color: gray;
+@select-color: black;
+
+@border-width: 1px;
+@border-select-width: 2px;
+@offset-padding: 15px;
+
+.align-root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.outside {
+  width: 80px;
+  height: 80px;
+  box-sizing: border-box;
+  border: 1px solid black;
+  position: relative;
+  .position {
+    position: absolute;
+  }
+
+  .top {
+    top: @offset-padding;
+    left: @offset-padding;
+    right: @offset-padding;
+    height: @width;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 3px;
+      right: 3px;
+      border-top: @border-width dashed @not-select-color;
+    }
+  }
+
+  .top-select {
+    &::before {
+      top: calc(50% - 0.5px);
+      border-top: @border-width solid @select-color;
+    }
+  }
+
+  .left {
+    top: @offset-padding;
+    left: @offset-padding;
+    bottom: @offset-padding;
+    width: @width;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 50%;
+      bottom: 3px;
+      border-left: @border-width dashed @not-select-color;
+    }
+  }
+
+  .left-select {
+    &::before {
+      border-left: @border-width solid @select-color;
+    }
+  }
+
+  .bottom {
+    left: @offset-padding;
+    right: @offset-padding;
+    bottom: @offset-padding;
+    height: @width;
+
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 50%;
+      left: 3px;
+      right: 3px;
+      border-bottom: @border-width dashed @not-select-color;
+    }
+  }
+
+  .bottom-select {
+    &::before {
+      border-bottom: @border-width solid @select-color;
+    }
+  }
+
+  .right {
+    top: @offset-padding;
+    right: @offset-padding;
+    bottom: @offset-padding;
+    width: @width;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      right: 50%;
+      bottom: 3px;
+      border-right: @border-width dashed @not-select-color;
+    }
+  }
+
+  .right-select {
+    &::before {
+      border-right: @border-width solid @select-color;
+    }
+  }
+
+  //垂直居中
+  .horizontal {
+    z-index: 0;
+    box-sizing: border-box;
+    top: 0px;
+    bottom: 0px;
+    left: calc(50% - 4px);
+    width: @width;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0px;
+      bottom: 0px;
+      border-left: @border-width dashed @not-select-color;
+    }
+  }
+
+  .horizontal-select {
+    &::before {
+      border-left: @border-width solid @select-color;
+    }
+  }
+
+  .vertical {
+    z-index: 0;
+    box-sizing: border-box;
+    top: calc(50% - 4px);
+    right: 0px;
+    left: 0px;
+    height: @width;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0px;
+      right: 0px;
+      border-bottom: @border-width dashed @not-select-color;
+    }
+  }
+
+  .vertical-select {
+    &::before {
+      border-bottom: @border-width solid @select-color;
+    }
+  }
+}

@@ -21,7 +21,8 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
     }
 
     function _get_components(nodeId: string) {
-        if (node_obj[nodeId]) {
+        let node: any = node_obj[nodeId]
+        if (node) {
             const n = node_obj[nodeId]
             const nodeBaseInfo = {
                 active: n.node.active,
@@ -34,11 +35,78 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
                 opacity: n.node.opacity,
                 name: `${n.node.name}<node>`
             }
-            // (n.node as any)._components 
-            return { node: nodeBaseInfo, comps: [] }
+            let comps = []
+            for (let i = 0; i < node._components.length; i++) {
+                let c = node._components[i]
+                let result: any = {}
+                if (c.name.indexOf("Sprite")) {
+                    result = _get_component_sprite(c)
+                } else if (c.name.indexOf("Widget")) {
+                    result = _get_component_widget(c)
+                } else if (c.name.indexOf("Label")) {
+                    result = _get_component_label(c)
+                } else {
+                    result = { name: c.name }
+                }
+                comps.push(result)
+            }
+            return { node: nodeBaseInfo, comps: comps }
         }
         return { node: null, comps: [] }
     }
+
+
+    function _get_component_sprite(com: cc.Sprite) {
+        let originalSize = com.spriteFrame.getOriginalSize()
+        let recf = (com.spriteFrame as any)._recf
+        return {
+            name: com.name,
+            sizeMode: com.sizeMode,
+            trim: com.trim,
+            uuid: com.uuid,
+            spriteFrame: {
+                originalSize: {
+                    width: originalSize.width,
+                    height: originalSize.height,
+                },
+                rect: {
+                    x: recf.x,
+                    y: recf.y,
+                    width: recf.width,
+                    height: recf.height
+                },
+                texture: {
+                    nativeUrl: com.spriteFrame.getTexture().nativeUrl
+                }
+            }
+        }
+    }
+
+    function _get_component_widget(com: cc.Widget) {
+        return {
+            alignMode: com.alignMode,
+            isAlignTop: com.isAlignTop,//是否打开顶对齐
+            isAlignRight: com.isAlignRight,//是否打开右对齐
+            isAlignBottom: com.isAlignBottom,//是否打开底对齐
+            isAlignLeft: com.isAlignLeft,//是否打开左对齐
+            isAbsHorizontalCenter: com.isAlignHorizontalCenter,
+            horizontalCenter: com.horizontalCenter, //垂直居中
+            isAlignVerticalCenter: com.isAlignVerticalCenter,
+            verticalCenter: com.verticalCenter, //水平居中
+        }
+    }
+
+    function _get_component_label(com: cc.Label) {
+        return {
+            fontSize: com.fontSize,
+            lineHeight: com.lineHeight,
+            string: com.string,
+            horizontalAlign: com.horizontalAlign,
+            verticalAlign: com.verticalAlign
+        }
+    }
+
+
 
     //初始化节点信息
     function eachBaseNodeInfo(node: cc.Node) {

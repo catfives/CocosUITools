@@ -1,5 +1,8 @@
+import { CCComponent } from "@/components/NodeComponent/CCComponents/CCComponent";
+import { CCLabel } from "@/components/NodeComponent/CCComponents/CCLabel";
 import { CCNode } from "@/components/NodeComponent/CCComponents/CCNode";
 import { CCSprite } from "@/components/NodeComponent/CCComponents/CCSprite";
+import { CCWidget } from "@/components/NodeComponent/CCComponents/CCWidget";
 import {
   BoxFlexAlignCenter,
   CheckBoxEx,
@@ -38,7 +41,7 @@ const ComponentContent: React.FC<{
 }> = ({ isBaseNode = false, nodeDetail }) => {
   const getNodeName = () => {
     if (!nodeDetail.name) {
-      return "Sprite";
+      return "Widget";
     }
     const idx = nodeDetail.name.indexOf("<");
     const str = nodeDetail.name.slice(idx + 1).replace(">", "");
@@ -46,7 +49,7 @@ const ComponentContent: React.FC<{
   };
 
   const renderComponent = () => {
-    return <CCSprite nodeDetail={{} as any}></CCSprite>;
+    return <CCWidget nodeDetail={{} as any}></CCWidget>;
   };
 
   return (
