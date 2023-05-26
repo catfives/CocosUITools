@@ -7,8 +7,7 @@ import {
   BoxFlexAlignCenter,
   CheckBoxEx,
   TypographyCapitalize,
-} from "@/components/Styleds";
-import { INodeDetail } from "@/interface/INodeDetails";
+} from "@/components/Styleds"; 
 import styled from "@emotion/styled";
 import { Box } from "@mui/material";
 
@@ -37,19 +36,25 @@ const StyledAttrContent = styled(Box)({
 
 const ComponentContent: React.FC<{
   isBaseNode?: boolean;
-  nodeDetail: INodeDetail;
+  nodeDetail: any;
 }> = ({ isBaseNode = false, nodeDetail }) => {
   const getNodeName = () => {
-    if (!nodeDetail.name) {
-      return "Widget";
-    }
+    if(isBaseNode){return "Node"}
     const idx = nodeDetail.name.indexOf("<");
     const str = nodeDetail.name.slice(idx + 1).replace(">", "");
     return str;
   };
 
   const renderComponent = () => {
-    return <CCWidget nodeDetail={{} as any}></CCWidget>;
+    const name = getNodeName()
+    if(name == "Widget") {
+      return <CCWidget nodeDetail={nodeDetail} />;
+    }else if(name == "Sprite") {
+      return <CCSprite nodeDetail={nodeDetail} />;
+    }else if(name == "Label"){
+      return <CCLabel nodeDetail={nodeDetail} />;
+    }
+    return <CCComponent  />;
   };
 
   return (

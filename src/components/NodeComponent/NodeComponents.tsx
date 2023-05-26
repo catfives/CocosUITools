@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import ComponentContent from "@/components/NodeComponent/ComponentContent";
 import { BoxFlexAlignCenter, IconButtonEx } from "@/components/Styleds";
 import { Tooltip, Typography as TypographyAntd } from "antd";
+// import { CCSprite } from "@/components/NodeComponent/CCComponents/CCSprite";
 
 const StyledComponentBox = styled(Box)({
   flex: 1,
@@ -37,13 +38,13 @@ const NodeRootContent = styled(Box)({
 
 const Root: React.FC<RootState["global"]> = ({ ...props }) => {
   //selectNodeComponents
-  const { selectNodeName, selectNodeDetails } = props;
+  const { selectNodeName, selectNodeDetails, selectNodeComponents } = props;
 
   return (
     <NodeRootContent>
       <StyledComponentBox>
         <Stack direction="column" spacing={1}>
-          {selectNodeName != "" ? (
+          {selectNodeName == "" ? (
             <></>
           ) : (
             <>
@@ -77,8 +78,30 @@ const Root: React.FC<RootState["global"]> = ({ ...props }) => {
                 isBaseNode={true}
                 nodeDetail={selectNodeDetails}
               />
+              <ComponentContent nodeDetail={{
+                name: "name<Sprite>",
+                sizeMode: 1,
+                trim: false,
+                uuid: 123123123,
+                type: 1,
+                spriteFrame: {
+                  uuid: "123123123-asdasd-1d2d1-21d12",
+                  originalSize: {
+                    width: 2,
+                    height: 2,
+                  },
+                  rect: {
+                    x: 89, y: 403, width: 250, height: 80
+                  },
+                  texture: {
+                    nativeUrl: "https://h5.sxjunte.com/assets/resources/native/17/173c33323.fea6f.png"
+                  }
+                }
+              }} />
               {/** 接下来是循环遍历comps */}
-              <ComponentContent nodeDetail={selectNodeDetails} />
+              {
+                selectNodeComponents.map(v => <ComponentContent nodeDetail={v} />)
+              }
             </>
           )}
         </Stack>

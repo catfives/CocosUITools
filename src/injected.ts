@@ -22,35 +22,39 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
 
     function _get_components(nodeId: string) {
         let node: any = node_obj[nodeId]
+
         if (node) {
-            const n = node_obj[nodeId]
-            const nodeBaseInfo = {
-                active: n.node.active,
-                x: n.node.x, y: n.node.y,
-                scaleX: n.node.scaleX, scaleY: n.node.scaleY,
-                anchorX: n.node.anchorX, anchorY: n.node.anchorY,
-                width: n.node.width, height: n.node.height,
-                color: n.node.color,
-                rotation: -n.node.angle,
-                opacity: n.node.opacity,
-                name: `${n.node.name}<node>`
-            }
-            let comps = []
-            for (let i = 0; i < node._components.length; i++) {
-                let c = node._components[i]
-                let result: any = {}
-                if (c.name.indexOf("Sprite")) {
-                    result = _get_component_sprite(c)
-                } else if (c.name.indexOf("Widget")) {
-                    result = _get_component_widget(c)
-                } else if (c.name.indexOf("Label")) {
-                    result = _get_component_label(c)
-                } else {
-                    result = { name: c.name }
+            if (node.node.isValid) {
+                const n = node_obj[nodeId]
+                const nodeBaseInfo = {
+                    active: n.node.active,
+                    x: n.node.x, y: n.node.y,
+                    scaleX: n.node.scaleX, scaleY: n.node.scaleY,
+                    anchorX: n.node.anchorX, anchorY: n.node.anchorY,
+                    width: n.node.width, height: n.node.height,
+                    color: n.node.color,
+                    rotation: -n.node.angle,
+                    opacity: n.node.opacity,
+                    name: `${n.node.name}<node>`
                 }
-                comps.push(result)
+                let comps = []
+                for (let i = 0; i < node.node._components.length; i++) {
+                    let c = node.node._components[i]
+                    let result: any = {}
+                    if (c.name.indexOf("Sprite") != -1) {
+                        result = _get_component_sprite(c)
+                    } else if (c.name.indexOf("Widget") != -1) {
+                        result = _get_component_widget(c)
+                    } else if (c.name.indexOf("Label") != -1) {
+                        result = _get_component_label(c)
+                    } else {
+                        result = { name: c.name }
+                    }
+                    comps.push(result)
+                }
+                console.log("获取原始数据", { node: nodeBaseInfo, comps: comps })
+                return { node: nodeBaseInfo, comps: comps }
             }
-            return { node: nodeBaseInfo, comps: comps }
         }
         return { node: null, comps: [] }
     }
@@ -58,13 +62,15 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
 
     function _get_component_sprite(com: cc.Sprite) {
         let originalSize = com.spriteFrame.getOriginalSize()
-        let recf = (com.spriteFrame as any)._recf
+        let recf = (com.spriteFrame as any)._rect
         return {
             name: com.name,
             sizeMode: com.sizeMode,
             trim: com.trim,
             uuid: com.uuid,
+            type: com.type,
             spriteFrame: {
+                uuid: com.spriteFrame != null ? (com.spriteFrame as any)._uuid : "",
                 originalSize: {
                     width: originalSize.width,
                     height: originalSize.height,
@@ -76,7 +82,7 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
                     height: recf.height
                 },
                 texture: {
-                    nativeUrl: com.spriteFrame.getTexture().nativeUrl
+                    nativeUrl: window.location.origin + "/" + com.spriteFrame.getTexture().nativeUrl
                 }
             }
         }
@@ -84,6 +90,7 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
 
     function _get_component_widget(com: cc.Widget) {
         return {
+            name: com.name,
             alignMode: com.alignMode,
             isAlignTop: com.isAlignTop,//是否打开顶对齐
             isAlignRight: com.isAlignRight,//是否打开右对齐
@@ -98,6 +105,7 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
 
     function _get_component_label(com: cc.Label) {
         return {
+            name: com.name,
             fontSize: com.fontSize,
             lineHeight: com.lineHeight,
             string: com.string,
@@ -134,9 +142,7 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
     }
 
 
-    function getComponentType() {
 
-    }
 
     window.addEventListener("message", (evt: MessageEvent<RpcMessageType>) => {
         const { type, id, data } = evt.data
