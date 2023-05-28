@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { FC, useEffect, useState } from "react";
 import "./index.less";
 
-const component = () => {
+const component: FC<{ data: any }> = ({ data }) => {
   const [dir, setDir] = useState({
     left: false,
     right: false,
@@ -10,6 +10,18 @@ const component = () => {
     horizontal: false,
     vertical: false,
   });
+
+  useEffect(() => {
+    let d = {
+      left: data.isAlignLeft,
+      right: data.isAlignRight,
+      top: data.isAlignTop,
+      bottom: data.isAlignBottom,
+      horizontal: data.isAbsHorizontalCenter,
+      vertical: data.isAlignVerticalCenter,
+    };
+    setDir(d);
+  }, [data]);
 
   const _onClick = (
     clickDir: "top" | "left" | "right" | "bottom" | "horizontal" | "vertical"

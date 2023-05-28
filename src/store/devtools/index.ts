@@ -48,36 +48,36 @@ interface IUserInfoReducer {
  */
 const initialState: IUserInfoReducer = {
     node_tree: [
-        {
-            "label": "Canvas", "uuid": "a5esZu+45LA5mBpvttspPD", "children": [
-                { "label": "Main Camera", "uuid": "e1WoFrQ79G7r4ZuQE3HlNb", "children": [] },
-                {
-                    "label": "New Button", "uuid": "152JkDyJ9KKpnxiETIhQQw", "children": [
-                        {
-                            "label": "Background", "uuid": "acd2tTGW1IhqO2V3XtY12N", "children": [
-                                { "label": "Label", "uuid": "47IYP6oytHRZa8j/BcTBA2", "children": [] }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "label": "New Button copy", "uuid": "60fTzUqPRO554ZCQHyYvtA", "children": [
-                        {
-                            "label": "Background_1", "uuid": "79sUps6ilL86EfCPrmzBbn", "children": [
-                                { "label": "Label_1", "uuid": "cafQ/CAgZGrIdRdbA1oaTz", "children": [] }
-                            ]
-                        }
-                    ]
-                },
-                { "label": "New Node", "uuid": "41MN8FCz9A0JkO/GOdGq49", "children": [] }
-            ]
-        },
-        {
-            "label": "PROFILER-NODE", "uuid": "Node.763", "children": [
-                { "label": "LEFT-PANEL", "uuid": "Node.765", "children": [] },
-                { "label": "RIGHT-PANEL", "uuid": "Node.766", "children": [] }
-            ]
-        }
+        // {
+        //     "label": "Canvas", "uuid": "a5esZu+45LA5mBpvttspPD", "children": [
+        //         { "label": "Main Camera", "uuid": "e1WoFrQ79G7r4ZuQE3HlNb", "children": [] },
+        //         {
+        //             "label": "New Button", "uuid": "152JkDyJ9KKpnxiETIhQQw", "children": [
+        //                 {
+        //                     "label": "Background", "uuid": "acd2tTGW1IhqO2V3XtY12N", "children": [
+        //                         { "label": "Label", "uuid": "47IYP6oytHRZa8j/BcTBA2", "children": [] }
+        //                     ]
+        //                 }
+        //             ]
+        //         },
+        //         {
+        //             "label": "New Button copy", "uuid": "60fTzUqPRO554ZCQHyYvtA", "children": [
+        //                 {
+        //                     "label": "Background_1", "uuid": "79sUps6ilL86EfCPrmzBbn", "children": [
+        //                         { "label": "Label_1", "uuid": "cafQ/CAgZGrIdRdbA1oaTz", "children": [] }
+        //                     ]
+        //                 }
+        //             ]
+        //         },
+        //         { "label": "New Node", "uuid": "41MN8FCz9A0JkO/GOdGq49", "children": [] }
+        //     ]
+        // },
+        // {
+        //     "label": "PROFILER-NODE", "uuid": "Node.763", "children": [
+        //         { "label": "LEFT-PANEL", "uuid": "Node.765", "children": [] },
+        //         { "label": "RIGHT-PANEL", "uuid": "Node.766", "children": [] }
+        //     ]
+        // }
     ],
     treeExpanded: [],
     selectNodeId: "",

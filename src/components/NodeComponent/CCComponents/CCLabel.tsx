@@ -5,7 +5,6 @@ import {
   CCSegmented,
   InputNumberWidthMax,
 } from "@/components/Styleds";
-import { INodeDetail } from "@/interface/INodeDetails";
 import { Stack } from "@mui/material";
 import TextArea from "antd/es/input/TextArea";
 import { ReactComponent as AlignLeft } from "@/assets/svg/alignLeft.svg";
@@ -18,7 +17,7 @@ import Icon from "@ant-design/icons";
 import styled from "@emotion/styled";
 const TextAreaEx = styled(TextArea)({ borderRadius: "2px" });
 
-const Component: React.FC<{ nodeDetail: INodeDetail }> = ({ nodeDetail }) => {
+const Component: React.FC<{ nodeDetail: any }> = ({ nodeDetail }) => {
   const _a = nodeDetail;
   console.log(_a);
   return (
@@ -26,7 +25,7 @@ const Component: React.FC<{ nodeDetail: INodeDetail }> = ({ nodeDetail }) => {
       <CCCompItemLine direction="row">
         <CCCompName>string</CCCompName>
         <CCCompAttrItem style={{ alignItems: "flex-start" }} size="middle">
-          <TextAreaEx rows={2} size="small" />
+          <TextAreaEx rows={2} size="small" value={nodeDetail.string} />
         </CCCompAttrItem>
       </CCCompItemLine>
 
@@ -34,7 +33,7 @@ const Component: React.FC<{ nodeDetail: INodeDetail }> = ({ nodeDetail }) => {
         <CCCompName>font size</CCCompName>
         <InputNumberWidthMax
           style={{ marginLeft: "30px" }}
-          defaultValue={2222}
+          defaultValue={nodeDetail.fontSize}
           step={0.1}
         />
       </CCCompItemLine>
@@ -42,7 +41,7 @@ const Component: React.FC<{ nodeDetail: INodeDetail }> = ({ nodeDetail }) => {
         <CCCompName>line height</CCCompName>
         <InputNumberWidthMax
           style={{ marginLeft: "30px" }}
-          defaultValue={2222}
+          defaultValue={nodeDetail.lineHeight}
           step={0.1}
         />
       </CCCompItemLine>
@@ -50,6 +49,7 @@ const Component: React.FC<{ nodeDetail: INodeDetail }> = ({ nodeDetail }) => {
         <CCCompName>horizontal align</CCCompName>
         {/* onChange={setValue} */}
         <CCSegmented
+          defaultValue={nodeDetail.horizontalAlign}
           options={[
             {
               value: 0,
@@ -70,6 +70,7 @@ const Component: React.FC<{ nodeDetail: INodeDetail }> = ({ nodeDetail }) => {
         {/* key : verticalAlign */}
         <CCCompName>vertical align</CCCompName>
         <CCSegmented
+          defaultValue={nodeDetail.verticalAlign}
           options={[
             {
               value: 0,

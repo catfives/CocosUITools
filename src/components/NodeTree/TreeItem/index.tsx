@@ -38,6 +38,7 @@ const HoverIconTreeItem: React.FC<any & HoverIconTreeItemProps> = ({
 
   const onClickStoreItem = (_event: any) => {
     _event.stopPropagation();
+    Request({ action: "out-console", data: nodeId });
   };
   return (
     <TreeItem

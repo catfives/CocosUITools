@@ -5,50 +5,49 @@ import {
   CCCompName,
   InputNumberWidthMax,
 } from "@/components/Styleds";
-import { INodeDetail } from "@/interface/INodeDetails";
 import { Stack } from "@mui/material";
 import { Select } from "antd";
 
-const Component: React.FC<{ nodeDetail: INodeDetail }> = ({ nodeDetail }) => {
+const Component: React.FC<{ nodeDetail: any }> = ({ nodeDetail }) => {
   return (
     <Stack spacing={1}>
       <CCCompItemLine direction="row">
         <CCCompName>top</CCCompName>
-        <Align></Align>
+        <Align data={nodeDetail}></Align>
       </CCCompItemLine>
       <CCCompItemLine direction="row">
         <CCCompName>top</CCCompName>
         <CCCompAttrItem size="middle">
-          <InputNumberWidthMax defaultValue={nodeDetail.x} step={0.1} />
+          <InputNumberWidthMax defaultValue={nodeDetail.top} step={0.1} />
         </CCCompAttrItem>
       </CCCompItemLine>
       <CCCompItemLine direction="row">
         <CCCompName>right</CCCompName>
         <CCCompAttrItem size="middle">
-          <InputNumberWidthMax defaultValue={nodeDetail.x} step={0.1} />
+          <InputNumberWidthMax defaultValue={nodeDetail.right} step={0.1} />
         </CCCompAttrItem>
       </CCCompItemLine>
       <CCCompItemLine direction="row">
         <CCCompName>bottom</CCCompName>
         <CCCompAttrItem size="middle">
-          <InputNumberWidthMax defaultValue={nodeDetail.x} step={0.1} />
+          <InputNumberWidthMax defaultValue={nodeDetail.bottom} step={0.1} />
         </CCCompAttrItem>
       </CCCompItemLine>
       <CCCompItemLine direction="row">
         <CCCompName>left</CCCompName>
         <CCCompAttrItem size="middle">
-          <InputNumberWidthMax defaultValue={nodeDetail.x} step={0.1} />
+          <InputNumberWidthMax defaultValue={nodeDetail.left} step={0.1} />
         </CCCompAttrItem>
       </CCCompItemLine>
       <CCCompItemLine direction="row">
         <CCCompName>size mode</CCCompName>
         <Select
-          defaultValue="1"
+          defaultValue={nodeDetail.alignMode}
           style={{ width: "100%" }}
           options={[
-            { value: "0", label: "ONCE" },
-            { value: "1", label: "ON_WINDOW_RESIZE" },
-            { value: "2", label: "ALWAYS" },
+            { value: 0, label: "ONCE" },
+            { value: 1, label: "ON_WINDOW_RESIZE" },
+            { value: 2, label: "ALWAYS" },
           ]}
         />
       </CCCompItemLine>

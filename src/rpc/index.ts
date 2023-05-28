@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IData, RpcMessageType } from "@/interface/IRpcMessageType"
-const initChrome = false
+const initChrome = true
 var tabId = 0
 
 if (initChrome) {
@@ -37,8 +37,6 @@ if (initChrome) {
                 })();`
         );
       }
-      //coconutool::page2content_request
-      console.log(evt);
     }
   );
   /* 注册一些基本响应时间 */

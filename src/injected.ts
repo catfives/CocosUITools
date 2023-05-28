@@ -2,6 +2,8 @@ import { INodeTree, QueueNodeItem } from "@/interface/INodeTree"
 import { RpcMessageType } from "@/interface/IRpcMessageType"
 
 (() => {
+    ///计数器
+    var outConsoleCount = 1
     const node_obj: Record<string, { parentId: string, node: cc.Node }> = ({} as any);
 
     //保存了优化过后的节点树
@@ -9,9 +11,34 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
     // const node_tree_dict: Record<string, INodeTree> = ({} as any);
     ((window as any).node_tree_objs = node_obj)
 
-    const rpc_method: Record<string, (data?: any) => any> = {
+    const rpc_method: Record<string, (...data: any) => any> = {
         "refresh": call_refresh_node_data,
         "components": _get_components,
+        "out-console": inputNodeConsole,
+        "setCompOrNodeAttr": _setCompOrNodeAttr
+    }
+
+    function _setCompOrNodeAttr(nodeId: string, attr: Record<string, any>, component?: string) {
+        if (nodeId == "") { return }
+        var node: any = node_obj[nodeId].node
+        if (!node) { return }
+        if (component && component != "") {
+            node = node.getComponent(component)
+        }
+        for (let key in attr) {
+            if (Object.hasOwn(node, key)) {
+                (node as any)[key] = attr[key]
+            }
+        }
+    }
+
+    function inputNodeConsole(nodeId: string) {
+        if (node_obj[nodeId] && node_obj[nodeId].node.isValid) {
+            const name = "UITemp" + String(outConsoleCount)
+            //@ts-ignore
+            window[name] = node_obj[nodeId].node as any
+            outConsoleCount++
+        }
     }
 
     // const rpc_req_id: Record<string, string> = {}
@@ -59,17 +86,19 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
         return { node: null, comps: [] }
     }
 
-
     function _get_component_sprite(com: cc.Sprite) {
-        let originalSize = com.spriteFrame.getOriginalSize()
-        let recf = (com.spriteFrame as any)._rect
-        return {
+        let returnData: any = {
             name: com.name,
             sizeMode: com.sizeMode,
             trim: com.trim,
             uuid: com.uuid,
             type: com.type,
-            spriteFrame: {
+            spriteFrame: null
+        }
+        if (com.spriteFrame) {
+            let originalSize = com.spriteFrame.getOriginalSize()
+            let recf = (com.spriteFrame as any)._rect
+            returnData.spriteFrame = {
                 uuid: com.spriteFrame != null ? (com.spriteFrame as any)._uuid : "",
                 originalSize: {
                     width: originalSize.width,
@@ -86,6 +115,7 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
                 }
             }
         }
+        return returnData
     }
 
     function _get_component_widget(com: cc.Widget) {
@@ -93,9 +123,13 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
             name: com.name,
             alignMode: com.alignMode,
             isAlignTop: com.isAlignTop,//是否打开顶对齐
+            top: com.top,
             isAlignRight: com.isAlignRight,//是否打开右对齐
+            right: com.right,
             isAlignBottom: com.isAlignBottom,//是否打开底对齐
+            bottom: com.bottom,
             isAlignLeft: com.isAlignLeft,//是否打开左对齐
+            left: com.left,
             isAbsHorizontalCenter: com.isAlignHorizontalCenter,
             horizontalCenter: com.horizontalCenter, //垂直居中
             isAlignVerticalCenter: com.isAlignVerticalCenter,
@@ -113,8 +147,6 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
             verticalAlign: com.verticalAlign
         }
     }
-
-
 
     //初始化节点信息
     function eachBaseNodeInfo(node: cc.Node) {
@@ -141,19 +173,26 @@ import { RpcMessageType } from "@/interface/IRpcMessageType"
         node_base_tree = result[0].children;
     }
 
-
-
-
     window.addEventListener("message", (evt: MessageEvent<RpcMessageType>) => {
         const { type, id, data } = evt.data
         if (type == "CocosUITools::content.request.inject") {
             console.log("收到了消息欸:")
             if (rpc_method[data.action]) {
-                const ret = rpc_method[data.action](data.data)
+                var ret: any = null
+                if (data.data instanceof Array) {
+                    ret = rpc_method[data.action].apply(this, data.data)
+                } else {
+                    ret = rpc_method[data.action](data.data)
+                }
                 if (id && id != "") {
                     window.postMessage({ type: "CocosUITools::inject.respone.content", id, data: ret })
                 }
             }
         }
+    })
+
+    //执行注入场景切换时间
+    cc.director.on(cc.Director.EVENT_AFTER_SCENE_LAUNCH, () => {
+        eachBaseNodeInfo(cc.director.getScene())
     })
 })()

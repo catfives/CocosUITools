@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import ComponentContent from "@/components/NodeComponent/ComponentContent";
 import { BoxFlexAlignCenter, IconButtonEx } from "@/components/Styleds";
 import { Tooltip, Typography as TypographyAntd } from "antd";
+import { Request } from "@/rpc";
 // import { CCSprite } from "@/components/NodeComponent/CCComponents/CCSprite";
 
 const StyledComponentBox = styled(Box)({
@@ -38,7 +39,12 @@ const NodeRootContent = styled(Box)({
 
 const Root: React.FC<RootState["global"]> = ({ ...props }) => {
   //selectNodeComponents
-  const { selectNodeName, selectNodeDetails, selectNodeComponents } = props;
+  const {
+    selectNodeName,
+    selectNodeId,
+    selectNodeDetails,
+    selectNodeComponents,
+  } = props;
 
   return (
     <NodeRootContent>
@@ -55,6 +61,13 @@ const Root: React.FC<RootState["global"]> = ({ ...props }) => {
                     size="small"
                     defaultChecked={selectNodeDetails.active}
                     disableRipple={true}
+                    onChange={(_evt: any, checked: boolean) => {
+                      Request({
+                        action: "setCompOrNodeAttr",
+                        data: [selectNodeId, { active: checked }],
+                      });
+                      //setCompOrNodeAttr
+                    }}
                     icon={<EyeInvisibleOutlined />}
                     checkedIcon={<EyeOutlined />}
                   />
@@ -78,30 +91,36 @@ const Root: React.FC<RootState["global"]> = ({ ...props }) => {
                 isBaseNode={true}
                 nodeDetail={selectNodeDetails}
               />
-              <ComponentContent nodeDetail={{
-                name: "name<Sprite>",
-                sizeMode: 1,
-                trim: false,
-                uuid: 123123123,
-                type: 1,
-                spriteFrame: {
-                  uuid: "123123123-asdasd-1d2d1-21d12",
-                  originalSize: {
-                    width: 2,
-                    height: 2,
+              {/* <ComponentContent
+                nodeDetail={{
+                  name: "name<Sprite>",
+                  sizeMode: 1,
+                  trim: false,
+                  uuid: 123123123,
+                  type: 1,
+                  spriteFrame: {
+                    uuid: "123123123-asdasd-1d2d1-21d12",
+                    originalSize: {
+                      width: 2,
+                      height: 2,
+                    },
+                    rect: {
+                      height: 2338,
+                      width: 1080,
+                      x: 0,
+                      y: 0,
+                    },
+                    texture: {
+                      nativeUrl:
+                        "https://h5.huiyixun.com/assets/main/native/17/1738a3ed-9500-40f9-8386-848fec9b2052.c24e6.png",
+                    },
                   },
-                  rect: {
-                    x: 89, y: 403, width: 250, height: 80
-                  },
-                  texture: {
-                    nativeUrl: "https://h5.sxjunte.com/assets/resources/native/17/173c33323.fea6f.png"
-                  }
-                }
-              }} />
+                }}
+              /> */}
               {/** 接下来是循环遍历comps */}
-              {
-                selectNodeComponents.map(v => <ComponentContent nodeDetail={v} />)
-              }
+              {selectNodeComponents.map((v) => (
+                <ComponentContent nodeDetail={v} />
+              ))}
             </>
           )}
         </Stack>
